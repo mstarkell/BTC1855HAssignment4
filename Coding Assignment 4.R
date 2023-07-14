@@ -4,8 +4,9 @@
 # 1. Read the data into a data frame (make sure that column names do not have spaces in them).
 
   # Read data int a data frame
+
   library(readr)
-  ufo <- read_csv("Desktop/ufo_subset.csv")
+  ufo <- read_csv("ufo_subset.csv")
   View(ufo)
   # Replace spaces in column names with underscores
   colnames(ufo) <- gsub(" ", "_", colnames(ufo))
