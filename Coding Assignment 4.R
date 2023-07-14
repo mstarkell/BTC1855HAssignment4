@@ -14,7 +14,7 @@
   
 # 2. Find the rows where Shape information is missing and impute with "unknown".
   
-  # View rows where shape infomration is missing by subsetting
+  # View rows where shape information is missing by subsetting
   missingshaperows <- subset(ufo, is.na(shape))
   # Impute missing shape information with "unknown"
   ufo$shape <- replace(ufo$shape, is.na(ufo$shape), "unknown")
@@ -55,6 +55,7 @@
   # 4.4 Convert date_posted into appropriate format
     # check class of date_posted values
     class(ufo3$date_posted)
+    # convert to date data type
     ufo3$date_posted <- lubridate::dmy(ufo3$date_posted)
   
   
@@ -91,25 +92,27 @@
     
    delaypercountry <- ufo6 %>% group_by(country) %>% summarize(average_delay = mean(report_delay))
    print(delaypercountry)
+   # Groups data by country and calculates average report_delay per country, summarizing the data within a table
 
    
 # 10. Check the data quality (missingness, format, range etc) of the "duration seconds" column. 
    
    # Explain what kinds of problems you have identified and how you chose to deal with them, in your comments.
    class(ufo6$duration_seconds) # Class is numeric - this is good
-   sum(ufo6$duration_seconds < 0) # Sum of zero means there are no negative values
+   sum(ufo6$duration_seconds < 0) # Sum of values less than zero means there are no negative values
    sum(is.na(ufo6$duration_seconds)) # No NA values - this is good
    range(ufo6$duration_seconds) # Very large range of seconds
    
    # The major problem I identified is that the range of values is extremely large, from 2.00e-02 to 8.28e+07
    # To account for this, the histogram will use the log of duration_seconds so that the shape of the distribution can be visualized
+   # If we do not do this, the histogram will only appear to have one bar due to the low number of observations in groups with extreme values
   
    
 # 11. Create a histogram using the "duration seconds" column.   
    
-   hist(log10(ufo6$duration_seconds), main = "Histogram of Sighting Durations in Seconds", xlab = "Log10 of sighting duration (seconds)", ylab = "Frequency", col = "blue")
+   hist(log(ufo6$duration_seconds), main = "Histogram of Sighting Durations in Seconds", xlab = "Log of sighting duration (seconds)", ylab = "Frequency", col = "blue")
   
-   
+
 
    
    
